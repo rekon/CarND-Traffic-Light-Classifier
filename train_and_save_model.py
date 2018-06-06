@@ -18,6 +18,7 @@ from keras.callbacks import ModelCheckpoint
 ROOT_PATH = './'
 BATCH_SIZE = 4
 EPOCHS = 20
+NUM_CLASSES = 3
 
 IMAGE_HEIGHT = 600
 IMAGE_WIDTH = 800
@@ -112,7 +113,7 @@ def generator(data, should_augment=False):
                 # Appending them to existing batch
                 x_train = np.append(x_train, [image], axis=0)
                 y_train = np.append(y_train, [color])
-            y_train = to_categorical(y_train, num_classes=4)
+            y_train = to_categorical(y_train, num_classes=NUM_CLASSES)
 
             yield (x_train, y_train)
 
