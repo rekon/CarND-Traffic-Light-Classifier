@@ -110,7 +110,7 @@ def generator(data, should_augment=False):
                 # Appending them to existing batch
                 x_train = np.append(x_train, [image], axis=0)
                 y_train = np.append(y_train, [color])
-            y_train = to_categorical(y_train, num_classes=4)
+            y_train = to_categorical(y_train, num_classes=3)
 
             yield (x_train, y_train)
 

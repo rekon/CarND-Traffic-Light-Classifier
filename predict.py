@@ -1,14 +1,15 @@
-from keras.models import load_model
 import cv2
-import numpy as np
-from time import time
 import os
 import pandas as pd
+import numpy as np
 import random
 import csv
 import glob
-from sklearn import model_selection
+# import rospy
 
+from time import time
+from sklearn import model_selection
+from keras.models import load_model
 from keras.utils.np_utils import to_categorical
 
 FILENAME = './real_tl_classifier.h5'
@@ -72,22 +73,43 @@ def evaluate_model(data, class_idx):
             ctr += 1
     return ctr/len(scores)
 
+def predict_camera_image(image):
+    #resize the image
+    image = cv2.resize(image, (IMAGE_WIDTH, IMAGE_HEIGHT))
+
+    #load the model
+    if os.path.exists(FILENAME):
+        loaded_model = get_saved_model(FILENAME)
+    else:
+        print('Searched for:', FILENAME,'No saved model found!!')
+        # rospy.logdebug('Searched for:', FILENAME,'No saved model found!!')
+        return None
+    image = np.reshape( image, (1, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNEL))
+    scores = loaded_model.predict(image)
+    return np.argmax(scores)
 
 if __name__ == "__main__":
-    print('Accuracy for Red Light..')
-    data = pd.read_csv(os.path.join('./traffic_light_test.csv'))
-    data = data[data.apply(lambda x: x['color'] == 'red', axis=1)]
-    result = evaluate_model(data, 0)
-    print(result*100, '%')
+    # print('Accuracy for Red Light..')
+    # data = pd.read_csv(os.path.join('./traffic_light_test.csv'))
+    # data = data[data.apply(lambda x: x['color'] == 'red', axis=1)]
+    # result = evaluate_model(data, 0)
+    # print(result*100, '%')
 
-    print('Accuracy for Green/Yellow Light..')
-    data = pd.read_csv(os.path.join('./traffic_light_test.csv'))
-    data = data[data.apply(lambda x: x['color'] == 'not_red', axis=1)]
-    result = evaluate_model(data, 1)
-    print(result*100, '%')
+    # print('Accuracy for Green/Yellow Light..')
+    # data = pd.read_csv(os.path.join('./traffic_light_test.csv'))
+    # data = data[data.apply(lambda x: x['color'] == 'not_red', axis=1)]
+    # result = evaluate_model(data, 1)
+    # print(result*100, '%')
 
-    print('Accuracy for images where there is no traffic light..')
-    data = pd.read_csv(os.path.join('./traffic_light_test.csv'))
-    data = data[data.apply(lambda x: x['color'] == 'not_light', axis=1)]
-    result = evaluate_model(data, 2)
-    print(result*100, '%')
+    # print('Accuracy for images where there is no traffic light..')
+    # data = pd.read_csv(os.path.join('./traffic_light_test.csv'))
+    # data = data[data.apply(lambda x: x['color'] == 'not_light', axis=1)]
+    # result = evaluate_model(data, 2)
+    # print(result*100, '%')
+    image = cv2.imread('./dataset_resized/not_red/nrleft0040.jpg')
+    color = [ 'Traffic Light: Red', 'Traffic Light: Green/Yellow', 'No Traffic Light' ]
+    image_class = predict_camera_image(image)
+    if 0 <= image_class <= 2:
+        print('The predicted image class is -',color[image_class])
+    else:
+        print('Invalid prediction!!')
