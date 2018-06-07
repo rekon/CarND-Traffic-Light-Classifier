@@ -133,7 +133,7 @@ def get_model(time_len=1):
     model.add(Dropout(.35))
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(.5))
-    model.add(Dense(4))
+    model.add(Dense(NUM_CLASSES))
     # model.add(Lambda(lambda x: (K.exp(x) + 1e-4) / (K.sum(K.exp(x)) + 1e-4)))
     model.add(Lambda(lambda x: K.tf.nn.softmax(x)))
     
