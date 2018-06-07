@@ -7,3 +7,5 @@
 #### CSV and model training scripts are already present
 - Train the model and create **.h5** files.
 - Load **.h5** files and predict.
+
+_Please keep the python version **same** while training and inference time_ otherwise you may run into [Bad Marshal data error](https://github.com/keras-team/keras/issues/7440)
