@@ -8,4 +8,4 @@
 - Train the model and create **.h5** files.
 - Load **.h5** files and predict.
 
-_Please keep the python version **same** while training and inference _ otherwise you may run into [Bad Marshal data error](https://github.com/keras-team/keras/issues/7440)
+_Please keep the python version **same** while training and inference_ otherwise you may run into [Bad Marshal data error](https://github.com/keras-team/keras/issues/7440)
